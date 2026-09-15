@@ -1,0 +1,32 @@
+{
+  "name": "tangible/wp-appearance",
+  "description": "How Tangible looks on a WordPress site: the shared tangible-ui stylesheet handle, arbitrated across every Tangible plugin, and the site-wide front-end TUI theme.",
+  "type": "jetpack-library",
+  "license": "GPL-2.0-only",
+  "autoload": {
+    "psr-4": {
+      "Tangible\\WP\\Appearance\\": "./src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tangible\\WP\\Appearance\\Tests\\": "./tests"
+    }
+  },
+  "authors": [
+    {
+      "name": "Team Tangible"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.2"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-trunk": "0.1.x-dev"
+    },
+    "textdomain": "tangible-wp-appearance"
+  }
+}
