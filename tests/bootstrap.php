@@ -55,6 +55,23 @@ if (!function_exists('_doing_it_wrong')) {
     }
 }
 
+if (!function_exists('get_option')) {
+    function get_option(string $option, mixed $default = false): mixed {
+        return array_key_exists($option, $GLOBALS['__wp_test_options'] ?? [])
+            ? $GLOBALS['__wp_test_options'][$option]
+            : $default;
+    }
+}
+
+if (!function_exists('update_option')) {
+    function update_option(string $option, mixed $value, mixed $autoload = null): bool {
+        $GLOBALS['__wp_test_options'][$option] = $value;
+        $GLOBALS['__wp_test_option_autoload'][$option] = $autoload;
+
+        return true;
+    }
+}
+
 if (!function_exists('wp_deregister_style')) {
     function wp_deregister_style(string $handle): void {
         unset($GLOBALS['__wp_test_styles'][$handle]);
