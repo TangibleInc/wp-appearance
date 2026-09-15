@@ -67,13 +67,16 @@ final class AppearancePage {
         }
 
         // The stored theme rides along so the panel renders without a GET
-        // first; the panel still saves over REST.
+        // first; the panel still saves over REST. The previews are each
+        // plugin's server-rendered content for the live preview frame,
+        // collected here so their own assets enqueue on this page.
         wp_add_inline_script(
             PanelBundle::HANDLE,
             'window.tangibleAppearance = '.wp_json_encode([
                 'theme' => Appearance::load(),
                 'root_id' => self::ROOT_ID,
                 'docs_url' => apply_filters('tangible_appearance_docs_url', 'https://docs.tangiblelms.com/'),
+                'previews' => PreviewRegistry::collect(),
             ]).';',
             'before',
         );
