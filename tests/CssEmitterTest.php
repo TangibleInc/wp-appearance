@@ -8,6 +8,19 @@ use PHPUnit\Framework\TestCase;
 use Tangible\WP\Appearance\CssEmitter;
 
 final class CssEmitterTest extends TestCase {
+    /**
+     * The one thing every Tangible front end says before any theme: read
+     * as the site. Zero specificity, so a theme editing typography wins.
+     */
+    public function testTheFrontEndBaseInheritsTheHostsType(): void {
+        $this->assertSame(<<<'CSS'
+            :where(.tui-interface) {
+              --tui-typography-font-family: inherit;
+              --tui-typography-size: inherit;
+            }
+            CSS, CssEmitter::frontEndBase());
+    }
+
     public function testAnEmptyThemePrintsNothing(): void {
         $this->assertSame('', CssEmitter::css(['version' => 1]));
         $this->assertSame('', CssEmitter::css(['version' => 1, 'color_scheme' => 'dark']));
@@ -54,9 +67,9 @@ final class CssEmitterTest extends TestCase {
     }
 
     /**
-     * Layout rides the same zero-specificity selector as the colours —
-     * @tangible/ui 0.2.21 moved its scale variables to :where() to match
-     * the colour roles — as its own block, so the two concerns read apart.
+     * Layout rides the same zero-specificity selector as the colours (TUI
+     * 0.2.21 moved its scale variables to :where() to match the colour
+     * roles), as its own block so the two concerns read apart.
      */
     public function testLayoutIsEmittedAtZeroSpecificityAsItsOwnBlock(): void {
         $css = CssEmitter::css(['version' => 1, 'layout' => [

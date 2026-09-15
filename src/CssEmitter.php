@@ -22,11 +22,11 @@ namespace Tangible\WP\Appearance;
  *
  * - Layout — the spacing base, the font-size multiplier, border widths,
  *   the radius scale — is emitted at `:where(.tui-interface)` too, as a
- *   second block so a reader can see the two concerns apart. Until
- *   @tangible/ui 0.2.21 the scale variables sat at bare `.tui-interface`
- *   (0,1,0) and a zero-specificity override lost to them; 0.2.21 moved
- *   them to :where() to match the colour roles, which is what lets one
- *   uniform theme block after the sheet override everything.
+ *   second block so a reader can see the two concerns apart. Before TUI
+ *   0.2.21 the scale variables sat at bare `.tui-interface` (0,1,0) and a
+ *   zero-specificity override lost to them; 0.2.21 moved them to :where()
+ *   to match the colour roles, which is what lets one uniform theme block
+ *   after the sheet override everything.
  *
  * The rule this imposes on plugin stylesheets: never set TUI variables
  * at raised specificity. They print after `tangible-ui` and would beat
@@ -43,6 +43,24 @@ namespace Tangible\WP\Appearance;
  */
 final class CssEmitter {
     private const PREFIX = '--tui-';
+
+    /**
+     * What every Tangible front end shares before any site theme: the host
+     * theme's typeface and base size. A course page or a quiz should read
+     * as the site it sits in, not as TUI's defaults — the LMS and the quiz
+     * player each used to say this for themselves, at raised specificity,
+     * which is exactly the thing plugin stylesheets must not do. Printed
+     * on the shared handle ahead of the theme, at the same zero
+     * specificity, so a theme that later edits typography still wins.
+     *
+     * Front end only, like the theme: wp-admin keeps its WP-chrome theme.
+     */
+    public static function frontEndBase(): string {
+        return self::block(':where(.tui-interface)', [
+            self::PREFIX.'typography-font-family' => 'inherit',
+            self::PREFIX.'typography-size' => 'inherit',
+        ]);
+    }
 
     /**
      * @param array<string, mixed> $theme a stored theme (Appearance::load())

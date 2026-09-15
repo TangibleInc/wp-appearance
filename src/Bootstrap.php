@@ -32,9 +32,10 @@ final class Bootstrap {
         (new AppearancePage())->register();
 
         // Priority 100: after every enqueue site has had its say. The
-        // theme is attached to the handle as registered inline data, and
-        // WordPress prints it only if something on the page enqueues the
-        // handle — so a page with no Tangible surface still prints nothing.
+        // front-end base and the theme are attached to the handle as
+        // registered inline data, and WordPress prints them only if
+        // something on the page enqueues the handle — so a page with no
+        // Tangible surface still prints nothing.
         add_action('wp_enqueue_scripts', [self::class, 'printTheme'], 100);
     }
 
@@ -48,9 +49,12 @@ final class Bootstrap {
             return;
         }
 
-        $css = CssEmitter::css(Appearance::load());
-        if ('' === $css) {
-            return;
+        // The front-end base first, then the site's theme: both at zero
+        // specificity, so the theme wins on source order.
+        $css = CssEmitter::frontEndBase();
+        $theme = CssEmitter::css(Appearance::load());
+        if ('' !== $theme) {
+            $css .= "\n".$theme;
         }
 
         wp_add_inline_style(TuiStylesheet::HANDLE, $css);
