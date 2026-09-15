@@ -118,7 +118,7 @@ final class AppearanceTest extends TestCase {
                     'spacing_base' => 0,
                     'base_font_size' => 'large',
                     'radius_preset' => 'blobby',
-                    'radius' => ['xs' => -1, 'xl' => 500],
+                    'radius' => ['xs' => -1, 'xl' => 10000],
                 ],
             ]);
             $this->fail('expected InvalidAppearance');

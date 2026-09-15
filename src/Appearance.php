@@ -63,7 +63,11 @@ final class Appearance {
         'base_font_size' => [8, 48],
         'border_width' => [0, 8],
         'border_width_bold' => [0, 12],
-        'radius' => [0, 64],
+        // Up to TUI's own `--tui-radius-full` (9999px), for a Custom step
+        // someone wants fully round. (The Pill Shaped preset itself stops at
+        // 24px — half the tallest control — because textareas, notices and
+        // cards read the same step.)
+        'radius' => [0, 9999],
     ];
 
     /**
