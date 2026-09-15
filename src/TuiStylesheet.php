@@ -67,7 +67,8 @@ final class TuiStylesheet {
     /**
      * Offer a plugin's `build/tangible-ui.*` output, the shape the shared
      * webpack config emits: the CSS, the `.asset.php` carrying the build
-     * hash, and the `.meta.php` carrying the compiled @tangible/ui version.
+     * hash, and the `.meta.php` carrying the compiled @tangible/ui version
+     * (`['package' => '@tangible/ui', 'version' => '0.2.19']`).
      *
      * False — and no offer — when the build output is absent: a fresh
      * checkout before `pnpm build`, or a unit bootstrap. Callers then
@@ -98,7 +99,7 @@ final class TuiStylesheet {
             path: $css,
             version: (string) ($asset['version'] ?? ''),
             profile: $profile,
-            tuiVersion: (string) ($meta['tui_version'] ?? '0'),
+            tuiVersion: (string) ($meta['version'] ?? '0'),
         );
 
         return true;

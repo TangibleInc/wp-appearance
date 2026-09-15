@@ -20,13 +20,13 @@ namespace Tangible\WP\Appearance;
  *   mode survives. A dark override, when a theme carries one, goes at
  *   TUI's own dark selector and beats the light block the same way.
  *
- * - The spacing base, the font-size multiplier and the radius scale are
- *   emitted at bare `.tui-interface` — 0,1,0. An override at zero
- *   specificity would lose to them, so layout is emitted at
- *   `.tui-interface` as well: equal and later. Layout does not vary by
- *   colour scheme, so this never has to yield to dark mode. (Border
- *   widths sit in TUI's :where() block and ride along here anyway —
- *   over-specified, which is harmless for a scheme-independent value.)
+ * - Layout — the spacing base, the font-size multiplier, border widths,
+ *   the radius scale — is emitted at `:where(.tui-interface)` too, as a
+ *   second block so a reader can see the two concerns apart. Until
+ *   @tangible/ui 0.2.21 the scale variables sat at bare `.tui-interface`
+ *   (0,1,0) and a zero-specificity override lost to them; 0.2.21 moved
+ *   them to :where() to match the colour roles, which is what lets one
+ *   uniform theme block after the sheet override everything.
  *
  * The rule this imposes on plugin stylesheets: never set TUI variables
  * at raised specificity. They print after `tangible-ui` and would beat
@@ -61,7 +61,7 @@ final class CssEmitter {
 
         $layout = self::layoutDeclarations($theme['layout'] ?? []);
         if ([] !== $layout) {
-            $blocks[] = self::block($interface, $layout);
+            $blocks[] = self::block(":where({$interface})", $layout);
         }
 
         $dark = self::colorDeclarations($theme['colors_dark'] ?? []);

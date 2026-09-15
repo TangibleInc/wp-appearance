@@ -219,7 +219,7 @@ final class TuiStylesheetTest extends TestCase {
         if (null !== $tuiVersion) {
             file_put_contents(
                 $dir.'/build/tangible-ui.meta.php',
-                "<?php return array('tui_version' => '".$tuiVersion."');",
+                "<?php return array('package' => '@tangible/ui', 'version' => '".$tuiVersion."');",
             );
         }
 

@@ -26,6 +26,11 @@ final class Bootstrap {
 
         add_action('rest_api_init', [new AppearanceRestController(), 'registerRoutes']);
 
+        // The canonical settings page. Its panel bundle is whichever
+        // plugin's build wins PanelBundle's arbitration — offered by each
+        // plugin's boot alongside its TUI build.
+        (new AppearancePage())->register();
+
         // Priority 100: after every enqueue site has had its say. The
         // theme is attached to the handle as registered inline data, and
         // WordPress prints it only if something on the page enqueues the

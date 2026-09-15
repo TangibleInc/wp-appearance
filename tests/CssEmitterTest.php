@@ -54,12 +54,11 @@ final class CssEmitterTest extends TestCase {
     }
 
     /**
-     * TUI emits --tui-spacing-base, the size multiplier, border widths and
-     * the radius scale at bare .tui-interface — 0,1,0 — so a zero-
-     * specificity override would lose. Layout goes at .tui-interface:
-     * equal and later. It never varies by scheme, so nothing to yield to.
+     * Layout rides the same zero-specificity selector as the colours —
+     * @tangible/ui 0.2.21 moved its scale variables to :where() to match
+     * the colour roles — as its own block, so the two concerns read apart.
      */
-    public function testLayoutIsEmittedAtTuisOwnRaisedSpecificity(): void {
+    public function testLayoutIsEmittedAtZeroSpecificityAsItsOwnBlock(): void {
         $css = CssEmitter::css(['version' => 1, 'layout' => [
             'spacing_base' => 5,
             'base_font_size' => 18,
@@ -70,7 +69,7 @@ final class CssEmitterTest extends TestCase {
         ]]);
 
         $this->assertSame(<<<'CSS'
-            .tui-interface {
+            :where(.tui-interface) {
               --tui-spacing-base: 5px;
               --tui-typography-size-multiplier: calc(18px / 16);
               --tui-border-width: 1.5px;
@@ -93,7 +92,7 @@ final class CssEmitterTest extends TestCase {
             :where(.tui-interface) {
               --tui-color-bg: #fff;
             }
-            .tui-interface {
+            :where(.tui-interface) {
               --tui-spacing-base: 4px;
             }
             :where(.tui-interface)[data-theme="dark"] {
@@ -119,7 +118,7 @@ final class CssEmitterTest extends TestCase {
             :where(.tui-interface[data-tangible-theme="course-123"]) {
               --tui-focus-ring-color: #f59e0b;
             }
-            .tui-interface[data-tangible-theme="course-123"] {
+            :where(.tui-interface[data-tangible-theme="course-123"]) {
               --tui-border-width: 2px;
             }
             :where(.tui-interface[data-tangible-theme="course-123"])[data-theme="dark"] {
@@ -148,7 +147,7 @@ final class CssEmitterTest extends TestCase {
               --tui-theme-primary-base: #2942d1;
               --tui-color-fg: #111;
             }
-            .tui-interface {
+            :where(.tui-interface) {
               --tui-typography-size-multiplier: calc(18px / 16);
             }
             CSS, $css);
